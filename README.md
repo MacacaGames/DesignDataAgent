@@ -3,6 +3,10 @@
 Design data agent is a table parse tool for unity3D.
 You can define parse method easily, and parse data to unity scriptable object.
 
+## Dependencies
+Import the dependencies into your project.
+- Onion Data Editor : https://github.com/MacacaGames/OnionDataEditor
+
 ## Usage
 
 1. Import Design Data Agent in your unity.
