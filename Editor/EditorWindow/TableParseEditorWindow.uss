@@ -1,0 +1,93 @@
+.btn {
+    height: 36px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.progressItem {
+    flex-direction: row;
+    flex-grow: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(128, 128, 128, 0.05);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.progressItem .btn {
+    height: 24px;
+    width: 24px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgba(255, 35, 35, 0.1);
+    color: rgba(217, 217, 217, 0.5);
+}
+
+.progressItem .progress {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 200px;
+    flex-grow: 1;
+}
+
+.progressItem .label {
+    font-size: 14px;
+    -unity-text-align: middle-left;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 160px;
+}
+
+.unity-progress-bar__background {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.01);
+    border-right-color: rgba(0, 0, 0, 0.01);
+    border-top-color: rgba(0, 0, 0, 0.01);
+    border-bottom-color: rgba(0, 0, 0, 0.01);
+}
+
+.unity-progress-bar__progress {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-image: none;
+}
+
+.progressBar {
+    background-color: rgba(13, 79, 209, 255);
+    flex-grow: 1;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}

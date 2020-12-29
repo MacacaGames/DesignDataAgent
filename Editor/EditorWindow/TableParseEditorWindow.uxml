@@ -1,0 +1,32 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-grow: 1; flex-direction: column;">
+        <Style src="TableParseEditorWindow.uss" />
+        <ui:VisualElement style="padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; border-bottom-width: 1px; border-bottom-color: rgba(0, 0, 0, 0.1); display: none;">
+            <ui:VisualElement style="flex-direction: row; align-items: center;">
+                <ui:Label text="--" name="TableTitle" style="font-size: 20px; margin-bottom: 10px; margin-top: 10px; flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:Label text="--" name="FilePath" style="flex-grow: 1; white-space: normal; color: rgba(24, 24, 24, 0.81); margin-bottom: 10px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; flex-grow: 1; flex-shrink: 0;">
+            <ui:VisualElement style="flex-direction: row; align-items: center; margin-bottom: 10px; margin-left: 0; margin-right: 0; margin-top: 0; flex-shrink: 0;">
+                <ui:Label text="Missions" style="font-size: 20px; flex-grow: 1; -unity-text-align: middle-left;" />
+                <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                    <ui:Button text="Clear" name="ResetMission" class="btn" style="display: none;" />
+                    <ui:VisualElement style="flex-grow: 1;" />
+                    <ui:Button text="+" name="SelectFile" class="btn" style="font-size: 24px; width: 36px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label text="You have no mission.&#10;Press &apos;+&apos; to add mission." name="PathListEmpty" style="margin-top: 10px; margin-bottom: 10px; color: rgba(128, 128, 128, 0.4);" />
+            <ui:VisualElement name="PathList" style="padding-top: 10px; padding-bottom: 10px;" />
+            <ui:VisualElement style="flex-grow: 1;" />
+            <ui:VisualElement name="BtnContainer" style="align-items: center; flex-shrink: 0;">
+                <ui:Button text="Execute" name="Execute" class="btn" style="width: 150px;" />
+                <ui:Button text="Stop" name="BreakProgress" class="btn" style="flex-grow: 1; width: 150px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; margin-top: 20px; display: none;">
+                <ui:Toggle name="ToggleHideLog" />
+                <ui:Label text="Hide Logs" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
