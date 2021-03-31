@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using System.Globalization;
 using System;
+using OnionCollections.DataEditor;
 
 
 [CreateAssetMenu(menuName = "Design Data Agent/Link Table", fileName = "LinkTable")]
@@ -102,7 +103,7 @@ public class LinkTable : ScriptableObject
 
     }
 
-
+    [NodeAction("Import TSV")]
     public void ImportDataFromTSV()
     {
         string path = EditorUtility.OpenFilePanel("Select Table(TSV)", "", "tsv");
@@ -124,8 +125,16 @@ public class LinkTable : ScriptableObject
             DateTime now = DateTime.Now;
             lastImportTime = $"{now:yyyy/MM/dd hh:mm:ss}";
 
-            EditorUtility.DisplayDialog("LinkTable", "DONE!", "OK");
+            //EditorUtility.DisplayDialog("LinkTable", "DONE!", "OK");
         }
+    }
+
+    [NodeAction("Copy Path")]
+    public void CopyPath()
+    {
+        string path = GetTableAssetPath();
+        EditorGUIUtility.systemCopyBuffer = path;
+        Debug.Log($"Copy Path : {path}");
     }
 
     //
@@ -183,11 +192,6 @@ public class LinkTableEditor: Editor
     Texture2D splitLineColor = null;
     Texture2D skipSplitLineColor = null;
 
-    GUIStyle headerStyle;
-    GUIStyle cellStyle;
-    GUIStyle hLineStyle;
-    GUIStyle vLineStyle;
-    GUIStyle hSkipLineStyle;
 
     void OnEnable()
     {
@@ -207,52 +211,9 @@ public class LinkTableEditor: Editor
 
     public override void OnInspectorGUI()
     {
-
-        headerStyle = new GUIStyle("Label")
-        {
-            border = new RectOffset(0, 0, 0, 0),
-            margin = new RectOffset(0, 0, 0, 0),
-            padding = new RectOffset(hPadding, hPadding, vPadding, vPadding),
-        };
-        headerStyle.normal.background = headerBackground;
-
-        cellStyle = new GUIStyle("Label")
-        {
-            border = new RectOffset(0, 0, 0, 0),
-            margin = new RectOffset(0, 0, 0, 0),
-            padding = new RectOffset(hPadding, hPadding, vPadding, vPadding),
-        };
-
-        hLineStyle = new GUIStyle("Label")
-        {
-            border = new RectOffset(0, 0, 0, 0),
-            margin = new RectOffset(0, 0, 0, 0),
-            padding = new RectOffset(hPadding, hPadding, 0, 0),
-        };
-        hLineStyle.normal.background = splitLineColor;
-
-        vLineStyle = new GUIStyle("Label")
-        {
-            border = new RectOffset(0, 0, 0, 0),
-            margin = new RectOffset(0, 0, 0, 0),
-            padding = new RectOffset(0, 0, vPadding, vPadding),
-        };
-        vLineStyle.normal.background = splitLineColor;
-
-        hSkipLineStyle = new GUIStyle("Label")
-        {
-            border = new RectOffset(0, 0, 0, 0),
-            margin = new RectOffset(0, 0, 0, 0),
-            padding = new RectOffset(0, 0, 0, 0),
-        };
-        hSkipLineStyle.normal.background = skipSplitLineColor;
-        hSkipLineStyle.normal.textColor = new Color(0.5F, 0.5F, 0.5F, 0.5F);
-        hSkipLineStyle.alignment = TextAnchor.MiddleCenter;
-
-
         GUILayout.Space(10);
 
-        string lastImportTime = string.IsNullOrEmpty(LinkTable.lastImportTime) ? "Never Import": $"{LinkTable.lastImportTime:yyyy/MM/dd hh:mm:ss}";
+        string lastImportTime = string.IsNullOrEmpty(LinkTable.lastImportTime) ? "Never Import" : $"{LinkTable.lastImportTime:yyyy/MM/dd hh:mm:ss}";
 
         using (new GUILayout.HorizontalScope())
         {
@@ -265,15 +226,15 @@ public class LinkTableEditor: Editor
             GUILayout.FlexibleSpace();
         }
 
-        GUILayout.Space(40);                
+        GUILayout.Space(40);
 
         using (new GUILayout.HorizontalScope())
         {
             float h = 26;
 
             var c = EditorGUIUtility.IconContent("d_Import");
-            c.text = " Import  ";
-                
+            c.text = "  Import  ";
+
             if (GUILayout.Button(c, GUILayout.Width(90), GUILayout.Height(h)))
             {
                 ShowImportMenu();
@@ -291,53 +252,132 @@ public class LinkTableEditor: Editor
 
             if (GUILayout.Button("Copy", GUILayout.Width(90), GUILayout.Height(h)))
             {
-                EditorGUIUtility.systemCopyBuffer = path;
-                Debug.Log($"Copy Path : {path}");
+                LinkTable.CopyPath();
             }
         }
 
         GUILayout.Space(30);
 
-        //Table View
-
-
-        try
-        {
-            int rowLines = Mathf.Min(LinkTable.ids.Count, 10);
-            DrawTableHeader();
-            for (int i = 0; i < rowLines; i++)
-            {
-                DrawTableRow(i);
-            }
-
-
-            if (LinkTable.ids.Count > 10)
-            {
-                DrawSkipSplitLine();
-                DrawTableRow(LinkTable.ids.Count - 1);
-            }
-        }
-        catch
-        {
-            GUILayout.Space(10);
-            GUILayout.Label("Table has some error...");
-        }
-
-
+        DrawTable();
 
         GUILayout.Space(30);
+        
+        isShow = EditorGUILayout.Foldout(isShow, $"Origin Data ({LinkTable.ids.Count})");
 
-        isShow = EditorGUILayout.Foldout(isShow, $"Origin ({LinkTable.ids.Count})");
-
-        if(isShow)
+        if (isShow)
         {
             base.OnInspectorGUI();
         }
 
+
+
         serializedObject.ApplyModifiedProperties();
 
+    }
 
 
+    GUIStyle headerStyle;
+    GUIStyle cellStyle;
+    GUIStyle hLineStyle;
+    GUIStyle vLineStyle;
+    GUIStyle hSkipLineStyle;
+    const int viewRowLines = 10;
+    void DrawTable()
+    {
+        InitStyles();
+
+        if (LinkTable.ids.Count == 0 && LinkTable.colNames.Count == 0)
+        {
+            float h = 26;
+
+            GUILayout.Label("This table is empty.", GUILayout.Height(h));
+            GUILayout.Space(5);
+
+            using (new GUILayout.HorizontalScope())
+            {
+                GUILayout.Label("Please ", GUILayout.Width(45), GUILayout.Height(h));
+
+
+                var c = EditorGUIUtility.IconContent("d_Import");
+                c.text = " Import  ";
+
+                if (GUILayout.Button(c, GUILayout.Width(90), GUILayout.Height(h)))
+                {
+                    ShowImportMenu();
+                }
+
+                GUILayout.Label(" data.", GUILayout.Height(h));
+            }
+        }
+        else
+        {
+            //Table View
+            try
+            {
+                int rowLines = Mathf.Min(LinkTable.ids.Count, viewRowLines);
+                DrawTableHeader();
+                for (int i = 0; i < rowLines; i++)
+                {
+                    DrawTableRow(i);
+                }
+
+                if (LinkTable.ids.Count > viewRowLines)
+                {
+                    DrawSkipSplitLine();
+                    DrawTableRow(LinkTable.ids.Count - 1);
+                }
+            }
+            catch
+            {
+                GUILayout.Space(10);
+                GUILayout.Label("Table has some error...");
+            }
+        }
+
+        void InitStyles()
+        {
+            headerStyle = new GUIStyle("Label")
+            {
+                border = new RectOffset(0, 0, 0, 0),
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(hPadding, hPadding, vPadding, vPadding),
+            };
+            headerStyle.normal.background = headerBackground;
+
+            cellStyle = new GUIStyle("Label")
+            {
+                border = new RectOffset(0, 0, 0, 0),
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(hPadding, hPadding, vPadding, vPadding),
+            };
+
+            hLineStyle = new GUIStyle("Label")
+            {
+                border = new RectOffset(0, 0, 0, 0),
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(hPadding, hPadding, 0, 0),
+            };
+            hLineStyle.normal.background = splitLineColor;
+
+            vLineStyle = new GUIStyle("Label")
+            {
+                border = new RectOffset(0, 0, 0, 0),
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(0, 0, vPadding, vPadding),
+            };
+            vLineStyle.normal.background = splitLineColor;
+
+            hSkipLineStyle = new GUIStyle("Label")
+            {
+                border = new RectOffset(0, 0, 0, 0),
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(0, 0, 0, 0),
+            };
+            hSkipLineStyle.normal.background = skipSplitLineColor;
+            hSkipLineStyle.normal.textColor = new Color(0.5F, 0.5F, 0.5F, 0.5F);
+            hSkipLineStyle.alignment = TextAnchor.MiddleCenter;
+        }
+        
         void DrawTableHeader()
         {
             float h = unitCellHeight;
@@ -388,7 +428,7 @@ public class LinkTableEditor: Editor
 
         void DrawVerticalSplitLine(float h)
         {
-            GUILayout.Label("", vLineStyle, GUILayout.Width(1),GUILayout.Height(h));
+            GUILayout.Label("", vLineStyle, GUILayout.Width(1), GUILayout.Height(h));
         }
 
         void DrawHorizontalSplitLine()
@@ -423,24 +463,23 @@ public class LinkTableEditor: Editor
             return unitIdCellWidth + 1 + (LinkTable.colNames.Count * (unitCellWidth + 1)) + 1;
         }
 
-        void ShowImportMenu()
-        {
-            Rect clickArea = EditorGUILayout.GetControlRect();
-            Event current = Event.current;
-
-            GenericMenu menu = new GenericMenu();
-
-            menu.AddItem(new GUIContent("From TSV"), false, () =>
-            {
-                LinkTable.ImportDataFromTSV();
-            });
-            menu.ShowAsContext();
-
-            current.Use();
-
-        }
-
-
-
     }
+       
+
+    void ShowImportMenu()
+    {
+        Event current = Event.current;
+
+        GenericMenu menu = new GenericMenu();
+
+        menu.AddItem(new GUIContent("From TSV"), false, () =>
+        {
+            LinkTable.ImportDataFromTSV();
+        });
+        menu.ShowAsContext();
+
+        current.Use();
+    }
+
+
 }
