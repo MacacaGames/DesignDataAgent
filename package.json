@@ -4,7 +4,10 @@
     "displayName": "Design Data Agent",
     "description": "Design data agent is a table parse tool for unity3D.You can define parse method easily, and parse data to unity scriptable object.",
     "unity": "2019.4",
-    "dependencies": { },
+    "dependencies": { 
+        "com.macacagames.oniondataeditor":"1.0.0",
+        "com.macacagames.unitylitjson":"0.7.1"
+    },
     "keywords": ["table", "designer"],
     "author": {
         "name": "Macaca Games",
