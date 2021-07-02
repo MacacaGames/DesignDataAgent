@@ -1,7 +1,9 @@
 {
     "name": "MacacaGames.DesignDataAgent.Editor",
+    "rootNamespace": "",
     "references": [
-        "OnionDataEditor"
+        "OnionDataEditor",
+        "UnityLitJson"
     ],
     "includePlatforms": [
         "Editor"
