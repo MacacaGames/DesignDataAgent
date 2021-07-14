@@ -1,0 +1,18 @@
+{
+    "name": "MacacaGames.DesignDataAgent.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6ab395f629d7c014ab347cc55259667b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
