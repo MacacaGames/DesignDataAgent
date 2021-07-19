@@ -30,6 +30,10 @@ namespace OnionCollections.DesignDataAgent
                 ["string"] = SetString,
                 ["object"] = SetObject,
                 ["Vector2"] = SetVector2,
+                ["Vector3"] = SetVector3,
+                ["Vector4"] = SetVector4,
+                ["Rect"] = SetRect,
+                ["Quaternion"] = SetQuaternion,
                 ["Sprite"] = SetSprite,
                 ["enum"] = SetEnumByName,
 
@@ -136,6 +140,10 @@ namespace OnionCollections.DesignDataAgent
             Enum = 4,
             Object = 5,
             Vector2 = 6,
+            Vector3 = 7,
+            Vector4 = 8,
+            Rect = 9,
+            Quaternion = 10,
         }
 
         const string emptyString = "(Empty)";
@@ -183,7 +191,35 @@ namespace OnionCollections.DesignDataAgent
                         Vector2 resultVector2 = (Vector2)value;
                         p.vector2Value = resultVector2;
 
-                        resultDescription = $"{Utilities.GetPathString(path)} = Vector2({resultVector2.x},{resultVector2.y})";
+                        resultDescription = $"{Utilities.GetPathString(path)} = Vector2({resultVector2.x}, {resultVector2.y})";
+                        break;
+
+                    case ValueType.Vector3:
+                        Vector3 resultVector3 = (Vector3)value;
+                        p.vector3Value = resultVector3;
+
+                        resultDescription = $"{Utilities.GetPathString(path)} = Vector3({resultVector3.x}, {resultVector3.y}, {resultVector3.z})";
+                        break;
+
+                    case ValueType.Vector4:
+                        Vector4 resultVector4 = (Vector4)value;
+                        p.vector4Value = resultVector4;
+
+                        resultDescription = $"{Utilities.GetPathString(path)} = Vector4({resultVector4.x}, {resultVector4.y}, {resultVector4.z}, {resultVector4.w})";
+                        break;
+
+                    case ValueType.Rect:
+                        Rect resultRect = (Rect)value;
+                        p.rectValue = resultRect;
+
+                        resultDescription = $"{Utilities.GetPathString(path)} = Rect({resultRect.x}, {resultRect.y}, {resultRect.width}, {resultRect.height})";
+                        break;
+
+                    case ValueType.Quaternion:
+                        Quaternion resultQuaternion = (Quaternion)value;
+                        p.quaternionValue = resultQuaternion;
+
+                        resultDescription = $"{Utilities.GetPathString(path)} = Quaternion({resultQuaternion.x}, {resultQuaternion.y}, {resultQuaternion.z}, {resultQuaternion.w})";
                         break;
 
                     case ValueType.Enum:
@@ -200,7 +236,7 @@ namespace OnionCollections.DesignDataAgent
                         break;
 
                     default:
-                        throw new Exception($"{designDataAgent.GetCellId(designDataAgent.currentExecutingCommand.Value)} 執行設定值時，沒有對應的型別可執行：{p} - {value.ToString()}({value.GetType().Name})。");
+                        throw new Exception($"{designDataAgent.GetCellId(designDataAgent.currentExecutingCommand.Value)} Can not set value by this type: {p} - {value}({value.GetType().Name})。");
 
                 }
 
@@ -209,7 +245,7 @@ namespace OnionCollections.DesignDataAgent
             }
             catch (Exception e)
             {
-                throw new Exception($"{designDataAgent.GetCellId(designDataAgent.currentExecutingCommand.Value)} 執行設定值時發生錯誤：{e.Message}。");
+                throw new Exception($"{designDataAgent.GetCellId(designDataAgent.currentExecutingCommand.Value)}：{e.Message}。");
             }
 
             return new DesignDataAgent.CommandExecuteResult
@@ -312,6 +348,98 @@ namespace OnionCollections.DesignDataAgent
             Vector2 v2 = new Vector2(x, y);
             return SetValue(cellInfo, param, v2, ValueType.Vector2);
         }
+
+        DesignDataAgent.CommandExecuteResult SetVector3(DesignDataAgent.CellInfo cellInfo, CommandParam param)
+        {
+            //value: [格值][賦予值]
+            //target: [目標路徑]
+            //[splitChar]: [分割字元](預設,)
+
+            char spChar = ',';
+            param = SetDefaultValueParam(cellInfo, param);
+            param = SetDefaultParam(param, "splitChar", spChar.ToString());
+
+            spChar = param["splitChar"][0];
+
+            string[] v = param["value"].Split(spChar).Select(item => item.Trim()).ToArray();
+
+            float x = float.Parse(v[0]);
+            float y = float.Parse(v[1]);
+            float z = float.Parse(v[2]);
+
+            Vector3 v2 = new Vector3(x, y, z);
+            return SetValue(cellInfo, param, v2, ValueType.Vector3);
+        }
+
+        DesignDataAgent.CommandExecuteResult SetVector4(DesignDataAgent.CellInfo cellInfo, CommandParam param)
+        {
+            //value: [格值][賦予值]
+            //target: [目標路徑]
+            //[splitChar]: [分割字元](預設,)
+
+            char spChar = ',';
+            param = SetDefaultValueParam(cellInfo, param);
+            param = SetDefaultParam(param, "splitChar", spChar.ToString());
+
+            spChar = param["splitChar"][0];
+
+            string[] v = param["value"].Split(spChar).Select(item => item.Trim()).ToArray();
+
+            float x = float.Parse(v[0]);
+            float y = float.Parse(v[1]);
+            float z = float.Parse(v[2]);
+            float w = float.Parse(v[3]);
+
+            Vector4 v2 = new Vector4(x, y, z, w);
+            return SetValue(cellInfo, param, v2, ValueType.Vector4);
+        }
+
+        DesignDataAgent.CommandExecuteResult SetRect(DesignDataAgent.CellInfo cellInfo, CommandParam param)
+        {
+            //value: [格值][賦予值]
+            //target: [目標路徑]
+            //[splitChar]: [分割字元](預設,)
+
+            char spChar = ',';
+            param = SetDefaultValueParam(cellInfo, param);
+            param = SetDefaultParam(param, "splitChar", spChar.ToString());
+
+            spChar = param["splitChar"][0];
+
+            string[] v = param["value"].Split(spChar).Select(item => item.Trim()).ToArray();
+
+            float x = float.Parse(v[0]);
+            float y = float.Parse(v[1]);
+            float width = float.Parse(v[2]);
+            float height = float.Parse(v[3]);
+
+            Rect v2 = new Rect(x, y, width, height);
+            return SetValue(cellInfo, param, v2, ValueType.Rect);
+        }
+
+        DesignDataAgent.CommandExecuteResult SetQuaternion(DesignDataAgent.CellInfo cellInfo, CommandParam param)
+        {
+            //value: [格值][賦予值]
+            //target: [目標路徑]
+            //[splitChar]: [分割字元](預設,)
+
+            char spChar = ',';
+            param = SetDefaultValueParam(cellInfo, param);
+            param = SetDefaultParam(param, "splitChar", spChar.ToString());
+
+            spChar = param["splitChar"][0];
+
+            string[] v = param["value"].Split(spChar).Select(item => item.Trim()).ToArray();
+
+            float x = float.Parse(v[0]);
+            float y = float.Parse(v[1]);
+            float z = float.Parse(v[2]);
+            float w = float.Parse(v[3]);
+
+            Quaternion v2 = new Quaternion(x, y, z, w);
+            return SetValue(cellInfo, param, v2, ValueType.Quaternion);
+        }
+
 
         DesignDataAgent.CommandExecuteResult SetEnum<T>(DesignDataAgent.CellInfo cellInfo, CommandParam param) where T : Enum
         {
