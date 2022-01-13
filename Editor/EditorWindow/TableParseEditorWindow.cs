@@ -20,7 +20,7 @@ namespace OnionCollections.DesignDataAgent
         {
             get
             {
-                //§ï¦¨ UPM «á­n°w¹ï¤£¦Pªº¶×¤J¤è¦¡³B²z¸ô®|
+                //æ”¹æˆ UPM å¾Œè¦é‡å°ä¸åŒçš„åŒ¯å…¥æ–¹å¼è™•ç†è·¯å¾‘
                 if (Directory.Exists(Application.dataPath + AssetsPath.Replace("Assets", "")))
                 {
                     return AssetsPath;
@@ -174,7 +174,7 @@ namespace OnionCollections.DesignDataAgent
 
                 PinFile(currentMissionItem.path);
 
-                //«ØTable
+                //å»ºTable
                 DesignDataAgent designDataAgent = null;
 
 
@@ -203,19 +203,19 @@ namespace OnionCollections.DesignDataAgent
 
                     if (table.tableVersion == DesignDataAgent.lastestVersion)
                     {
-                        //³Ì·sª©¥»
+                        //æœ€æ–°ç‰ˆæœ¬
                     }
                     else if (table.tableVersion >= DesignDataAgent.minSupportVersion)
                     {
-                        EditorUtility.DisplayDialog("ªí®æª©¥»¹LÂÂ", $"ªí®æ {table.GetDefineValue("title")} ª©¥»¹LÂÂ¡A\n±N¹Á¸Õ¶i¦æ¬Û®e©Ê°õ¦æ¡C\n\n½ĞºÉ³t±N¦¹ªí®æ¤É¯Åª©¥»¡C", "OK");
+                        EditorUtility.DisplayDialog("è¡¨æ ¼ç‰ˆæœ¬éèˆŠ", $"è¡¨æ ¼ {table.GetDefineValue("title")} ç‰ˆæœ¬éèˆŠï¼Œ\nå°‡å˜—è©¦é€²è¡Œç›¸å®¹æ€§åŸ·è¡Œã€‚\n\nè«‹ç›¡é€Ÿå°‡æ­¤è¡¨æ ¼å‡ç´šç‰ˆæœ¬ã€‚", "OK");
                     }
                     else
                     {
-                        EditorUtility.DisplayDialog("ªí®æª©¥»µLªk°õ¦æ", $"ªí®æ {table.GetDefineValue("title")} ª©¥»¹LÂÂ¡A\n¥BµLªk¶i¦æ¬Û®e©Ê°õ¦æ¡C\n\n½ĞºÉ³t±N¦¹ªí®æ¤É¯Åª©¥»¡C", "OK");
+                        EditorUtility.DisplayDialog("è¡¨æ ¼ç‰ˆæœ¬ç„¡æ³•åŸ·è¡Œ", $"è¡¨æ ¼ {table.GetDefineValue("title")} ç‰ˆæœ¬éèˆŠï¼Œ\nä¸”ç„¡æ³•é€²è¡Œç›¸å®¹æ€§åŸ·è¡Œã€‚\n\nè«‹ç›¡é€Ÿå°‡æ­¤è¡¨æ ¼å‡ç´šç‰ˆæœ¬ã€‚", "OK");
                         isExecuting = false;
                         //SystemSounds.Exclamation.Play();
                         Debug.Log("=============== End ===============");
-                        Debug.LogError("ªí®æª©¥»¹LÂÂµLªk°õ¦æ");
+                        Debug.LogError("è¡¨æ ¼ç‰ˆæœ¬éèˆŠç„¡æ³•åŸ·è¡Œ");
                         yield break;
                     }
 
@@ -244,12 +244,12 @@ namespace OnionCollections.DesignDataAgent
                 }
                 catch (System.Exception e)
                 {
-                    //¥¢±Ñ®Éª½±µµ²§ô
+                    //å¤±æ•—æ™‚ç›´æ¥çµæŸ
                     result = false;
                     throw e;
                 }
 #endif
-                        //¦pªG¾Ş§@¶¡¹j > 1frame³Ìªø®É¶¡¡A«h¸õ¤U¤@­Ó
+                        //å¦‚æœæ“ä½œé–“éš” > 1frameæœ€é•·æ™‚é–“ï¼Œå‰‡è·³ä¸‹ä¸€å€‹
                         if (EditorApplication.timeSinceStartup - tStart > frameWaitingTimeMax)
                         {
                             tStart = EditorApplication.timeSinceStartup;
@@ -309,7 +309,7 @@ namespace OnionCollections.DesignDataAgent
         {
             if (isExecuting == true)
             {
-                Debug.LogError("°õ¦æ´Á¶¡¤£¯à«ö¡I");
+                Debug.LogError("åŸ·è¡ŒæœŸé–“ä¸èƒ½æŒ‰ï¼");
                 return;
             }
 
@@ -330,7 +330,7 @@ namespace OnionCollections.DesignDataAgent
         {
             if (isExecuting == true)
             {
-                Debug.LogError("°õ¦æ´Á¶¡¤£¯à«ö¡I");
+                Debug.LogError("åŸ·è¡ŒæœŸé–“ä¸èƒ½æŒ‰ï¼");
                 return;
             }
 

@@ -113,3 +113,7 @@ If :
 - `IsFalse` : If value is false, do method.
 - `IsEqual` : If value equal target value, do method.
 - `IsNotEqual` : If value doesn't equal target value, do method.
+
+More Detail:
+
+https://docs.google.com/spreadsheets/d/1LNIFus8uxP8Dh8NUDZGNPkYyIn05rna1rx1-T-751FI/edit?usp=sharing
